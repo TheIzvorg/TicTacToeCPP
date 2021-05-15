@@ -18,6 +18,9 @@ struct Options {
 						{0,0,0,},
 						{0,0,0,},
 	};
+
+	int menu[3] = { 1,0,0 };
+	int menuSelect = 0;
 };
 
 void Victory(Options& options, string winner) {
@@ -44,7 +47,7 @@ void Draw(Options& options) {
 	}
 }
 
-void DrawCheck(Options& options) {
+bool DrawCheck(Options& options) {
 	// проверка на ничью 
 	int drawCounter = 0;
 	for (int i = 0; i < 3; i++) //переключение по строкам
@@ -59,10 +62,12 @@ void DrawCheck(Options& options) {
 	if (drawCounter == 0)
 	{
 		Draw(options);
+		return true;
 	}
+	return false;
 }
 
-void VictoryCheck(Options& options, bool Check) {
+bool VictoryCheck(Options& options, bool Check) {
 	// проверка победы крестов "Х"
 	if (Check) {
 		for (int i = 0; i < 3; i++) {
@@ -84,6 +89,7 @@ void VictoryCheck(Options& options, bool Check) {
 			if (Ycheck == 3 || Xcheck == 3 || XYcheck == 3 || YXcheck == 3)
 			{
 				Victory(options, "Крестики");
+				return true;
 				break;
 			}
 		}
@@ -109,19 +115,24 @@ void VictoryCheck(Options& options, bool Check) {
 			if (Ycheck == 3 || Xcheck == 3 || XYcheck == 3 || YXcheck == 3)
 			{
 				Victory(options, "Нолики");
+				return true;
 				break;
 			}
 		}
 	}
+	return false;
 }
 
-void VictoryCheck(Options& options, char symbol) {
+bool VictoryCheck(Options& options, char symbol) {
 	if (symbol == 'X' || symbol == 'x') {
 		VictoryCheck(options, true);
+		return true;
 	}
 	else if (symbol == 'O' || symbol == 'o') {
 		VictoryCheck(options, false);
+		return true;
 	}
+	return false;
 }
 
 void showMap(Options options) {
@@ -216,13 +227,65 @@ void PlayerMove(Options& options) {
 	} */
 }
 
-void Single() {
+void Single(Options& options) {
+	bool isEnd = false;
+	showMap(options);
+	do {
+		PlayerMove(options);
+		//VictoryCheck(options, true); // Проверка на победу X
+		isEnd = VictoryCheck(options, 'X'); // Проверка на победу X
+		BOTRandomXY(options);
+		//VictoryCheck(options, false); // Проверка на победу O
+		isEnd = VictoryCheck(options, 'O'); // Проверка на победу O
+		showMap(options);
+		isEnd = DrawCheck(options);
+	} while (!isEnd);
+}
+
+void Duo(Options& options) {
 
 }
 
 void showMenu(Options& options) {
-	cout << "[!]КРЕСТИКИ-НОЛИКИ[!]\n";
-
+	while (true) {
+		cout << "[!]КРЕСТИКИ-НОЛИКИ[!]\n";
+		char checker = options.menuSelect == 0 ? '/' : ' ';
+		cout << "[" << checker << "] Одиночная игра" << endl;
+		checker = options.menuSelect == 1 ? '/' : ' ';
+		cout << "[" << checker << "] Два игрока" << endl;
+		checker = options.menuSelect == 2 ? '/' : ' ';
+		cout << "[" << checker << "] Выход" << endl;
+		switch (_getch()) {
+		case 'w':
+		case 'W':
+		case 'ц':
+		case 'Ц':
+			if (options.menuSelect - 1 >= 0)
+				options.menuSelect--;
+			break;
+		case 's':
+		case 'S':
+		case 'ы':
+		case 'Ы':
+			if (options.menuSelect + 1 <= 2)
+				options.menuSelect++;
+			break;
+		case 13: // ENTER
+			if (options.menuSelect == 0) {
+				system("CLS");
+				Single(options);
+			}
+			else if (options.menuSelect == 1) {
+				system("CLS");
+				Duo(options);
+			}
+			else if (options.menuSelect == 2) {
+				exit(0);
+			}
+			break;
+		}
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 });
+	}
 }
 
 int main()
@@ -238,17 +301,10 @@ int main()
 
 	Options options;
 	bool isStop = true;
-	showMap(options);
+	//showMap(options);
 
 	for (; isStop;) {
 		//SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 }); // Ломает абсолютно всё, а переделывать леть
-		PlayerMove(options);
-		//VictoryCheck(options, true); // Проверка на победу X
-		VictoryCheck(options, 'X'); // Проверка на победу X
-		BOTRandomXY(options);
-		//VictoryCheck(options, false); // Проверка на победу O
-		VictoryCheck(options, 'O'); // Проверка на победу O
-		showMap(options);
-		DrawCheck(options);
+		showMenu(options);
 	}
 }
