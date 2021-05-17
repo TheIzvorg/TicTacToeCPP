@@ -6,42 +6,44 @@
 #include <string>;
 
 using namespace std;
-
+// РљРѕРѕСЂРґРёРЅР°С‚С‹ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
 struct Coordinates {
-	// Ось X
+	// РћСЃСЊ X
 	int X = 0;
-	// Ось Y
+	// РћСЃСЊ Y
 	int Y = 0;
 };
-
+// РЎС‚СЂСѓРєС‚СѓСЂР° СЃ РєР°СЂС‚РѕР№ Рё РјРµРЅСЋ
 struct Options {
-	// Массив - поле игры
+	// РњР°СЃСЃРёРІ - РїРѕР»Рµ РёРіСЂС‹
 	int map[3][3] = { {0,0,0,},
 					  {0,0,0,},
 					  {0,0,0,},
 	};
 
-	// Выбор в меню
+	// Р’С‹Р±РѕСЂ РІ РјРµРЅСЋ
 	int menuSelect = 0;
 };
-// Выводит сообщение о победе одной из сторон
+// Р’С‹РІРѕРґРёС‚ СЃРѕРѕР±С‰РµРЅРёРµ Рѕ РїРѕР±РµРґРµ РѕРґРЅРѕР№ РёР· СЃС‚РѕСЂРѕРЅ
 void Victory(Options& options, string winner) {
 	Sleep(1500);
 	system("cls");
-	cout << "[!]Победа за " << winner << "[!]\n";
+	cout << "[!]РџРѕР±РµРґР° Р·Р° " << winner << "[!]\n";
 	Sleep(2000);
+	// РћС‡РёС‰Р°РµС‚ РєР°СЂС‚Сѓ, РґР»СЏ РЅРѕРІРѕР№ РёРіСЂС‹
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			options.map[i][j] = 0;
 		}
 	}
 }
-// Выводит сообщение о ничье
+// Р’С‹РІРѕРґРёС‚ СЃРѕРѕР±С‰РµРЅРёРµ Рѕ РЅРёС‡СЊРµ
 void Draw(Options& options) {
 	Sleep(1500);
 	system("cls");
-	cout << "[!]Победы не будет!!! т. к. поля для заполнения закончились[!]\n";
+	cout << "[!]РџРѕР±РµРґС‹ РЅРµ Р±СѓРґРµС‚!!! С‚. Рє. РїРѕР»СЏ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ Р·Р°РєРѕРЅС‡РёР»РёСЃСЊ[!]\n";
 	Sleep(2000);
+	// РћС‡РёС‰Р°РµС‚ РєР°СЂС‚Сѓ РґР»СЏ РЅРѕРІРѕР№ РёРіСЂС‹
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			options.map[i][j] = 0;
@@ -49,19 +51,22 @@ void Draw(Options& options) {
 	}
 	system("CLS");
 }
-// Проверяет, заполненны ли все поля, если да, то - Ничья
+// РџСЂРѕРІРµСЂСЏРµС‚, Р·Р°РїРѕР»РЅРµРЅРЅС‹ Р»Рё РІСЃРµ СЏС‡РµР№РєРё, РµСЃР»Рё РґР°, С‚Рѕ - РќРёС‡СЊСЏ
 bool DrawCheck(Options& options) {
-	// проверка на ничью 
+	// РїСЂРѕРІРµСЂРєР° РЅР° РЅРёС‡СЊСЋ 
 	int drawCounter = 0;
-	for (int i = 0; i < 3; i++) //переключение по строкам
+	for (int i = 0; i < 3; i++) //РїРµСЂРµРєР»СЋС‡РµРЅРёРµ РїРѕ СЃС‚СЂРѕРєР°Рј
 	{
-		for (int j = 0; j < 3; j++)// переключение по столбцам
+		for (int j = 0; j < 3; j++)// РїРµСЂРµРєР»СЋС‡РµРЅРёРµ РїРѕ СЃС‚РѕР»Р±С†Р°Рј
 		{
+			// Р•СЃР»Рё РїСЂРё РїСЂРѕРІРµСЂРєРµ Р±СѓРґРµС‚ РѕР±РЅР°СЂСѓР¶РµРЅРЅР°, С…РѕС‚СЊ РѕРґРЅР° СЃРІРѕР±РѕРґРЅР°СЏ СЏС‡РµРєР°, С‚Рѕ РЅРёС‡СЊРё РЅРµ Р±СѓРґРµС‚
 			if (options.map[i][j] == 0) {
 				drawCounter++;
+				break;
 			}
 		}
 	}
+	// Р•СЃР»Рё СЃРІРѕР±РѕРґРЅС‹С… СЏС‡РµРµРє РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅРЅРѕ, С‚Рѕ Р±СѓРґРµС‚ РЅРёС‡СЊСЏ
 	if (drawCounter == 0)
 	{
 		Draw(options);
@@ -69,10 +74,10 @@ bool DrawCheck(Options& options) {
 	}
 	return false;
 }
-// Проверяет одну из сторон на победу.
+// РџСЂРѕРІРµСЂСЏРµС‚ РѕРґРЅСѓ РёР· СЃС‚РѕСЂРѕРЅ РЅР° РїРѕР±РµРґСѓ.
 bool VictoryCheck(Options& options, bool Check) {
-	// проверка победы крестов "Х"
-	string field = Check ? "Крестики" : "Нолики";
+	// РїСЂРѕРІРµСЂРєР° РїРѕР±РµРґС‹ РєСЂРµСЃС‚РѕРІ "РҐ"
+	string field = Check ? "РљСЂРµСЃС‚РёРєРё" : "РќРѕР»РёРєРё";
 	for (int i = 0; i < 3; i++) {
 		int Ycheck = 0, Xcheck = 0, XYcheck = 0, YXcheck = 0;
 		for (int j = 0; j < 3; j++) {
@@ -98,7 +103,7 @@ bool VictoryCheck(Options& options, bool Check) {
 	}
 	return false;
 }
-// Проверяет одну из сторон на победу.
+// РџСЂРѕРІРµСЂСЏРµС‚ РѕРґРЅСѓ РёР· СЃС‚РѕСЂРѕРЅ РЅР° РїРѕР±РµРґСѓ.
 bool VictoryCheck(Options& options, char symbol) {
 	if (symbol == 'X' || symbol == 'x') {
 		return VictoryCheck(options, true);
@@ -108,16 +113,16 @@ bool VictoryCheck(Options& options, char symbol) {
 	}
 	return false;
 }
-// Показывает поле для игры
+// РџРѕРєР°Р·С‹РІР°РµС‚ РїРѕР»Рµ РґР»СЏ РёРіСЂС‹
 void showMap(Options options) {
 	system("cls");
 	cout << "  X 1   2   3  " << endl;
 	cout << "Y +---+---+---+" << endl;
-	// вывод карты 
-	for (int i = 0; i < 3; i++) //переключение по строкам
+	// РІС‹РІРѕРґ РєР°СЂС‚С‹ 
+	for (int i = 0; i < 3; i++) //РїРµСЂРµРєР»СЋС‡РµРЅРёРµ РїРѕ СЃС‚СЂРѕРєР°Рј
 	{
 		cout << i + 1 << " ";
-		for (int j = 0; j < 3; j++) // переключение по столбцам
+		for (int j = 0; j < 3; j++) // РїРµСЂРµРєР»СЋС‡РµРЅРёРµ РїРѕ СЃС‚РѕР»Р±С†Р°Рј
 		{
 			cout << "| ";
 			if (options.map[i][j] == 3)
@@ -142,34 +147,34 @@ void showMap(Options options) {
 	}
 	Sleep(1000);
 }
-// Бот для одиночной сессии
+// Р‘РѕС‚ РґР»СЏ РѕРґРёРЅРѕС‡РЅРѕР№ СЃРµСЃСЃРёРё
 void BOTRandomXY(Options& options) {
 	Coordinates cord;
 
-	cout << "Ход Бота";
+	cout << "РҐРѕРґ Р‘РѕС‚Р°";
 
 	srand(time(0) % (rand() / 2 - 5 / 3 * 2));
 	bool isStop = true;
 	do{
 		cord.X = rand() % 3;
 		cord.Y = rand() % 3;
-
+		// Р•СЃР»Рё РІС‹Р±СЂР°РЅРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ СѓР¶Рµ Р·Р°РЅСЏС‚С‹, С‚Рѕ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІС‹Р±РёСЂР°СЋС‚СЃСЏ Р·Р°РЅРѕРіРѕ, РїРѕРєР° РЅРµ Р±СѓРґРµС‚ РЅР°Р№РґРµРЅРѕ СЃРІРѕР±РѕРґРЅР°СЏ СЏС‡РµР№РєР°
 		isStop = !(options.map[cord.X][cord.Y] == 2 || options.map[cord.X][cord.Y] == 1);
 		cout << ". ";
 	} while (!isStop);
 	options.map[cord.X][cord.Y] = 2;
 	cout << endl;
 }
-// Метод, при помощи которого человек будет ходить
+// РњРµС‚РѕРґ, РїСЂРё РїРѕРјРѕС‰Рё РєРѕС‚РѕСЂРѕРіРѕ С‡РµР»РѕРІРµРє Р±СѓРґРµС‚ С…РѕРґРёС‚СЊ
 void PlayerMove(Options& options, int player) {
 
-	// Логарифм золотого сечения ln(n)
+	// Р›РѕРіР°СЂРёС„Рј Р·РѕР»РѕС‚РѕРіРѕ СЃРµС‡РµРЅРёСЏ ln(n)
 	Coordinates cord;
 
 	do {
-		cout << "Введите координату Y: ";
+		cout << "Р’РІРµРґРёС‚Рµ РєРѕРѕСЂРґРёРЅР°С‚Сѓ Y: ";
 		cin >> cord.X;
-		cout << "Введите координату X: ";
+		cout << "Р’РІРµРґРёС‚Рµ РєРѕРѕСЂРґРёРЅР°С‚Сѓ X: ";
 		cin >> cord.Y;
 		cout << "\n";
 		cord.X = cord.X > 0 || cord.X <= 3 ? cord.X - 1 : cord.X % 3;
@@ -179,17 +184,17 @@ void PlayerMove(Options& options, int player) {
 			options.map[cord.X][cord.Y] = player;
 			break;
 		}
-		cout << "[!]Введите координаты повторно\n";
+		cout << "[!]Р’РІРµРґРёС‚Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РїРѕРІС‚РѕСЂРЅРѕ\n";
 
 	} while (true);
 
 	/* for (;;) {
 
 		if (options.map[cord.X][cord.Y] == 2 || options.map[cord.X][cord.Y] == 1) {
-			cout << "[!]Введите координаты повторно\n";
-			cout << "Введите координату Y: ";
+			cout << "[!]Р’РІРµРґРёС‚Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РїРѕРІС‚РѕСЂРЅРѕ\n";
+			cout << "Р’РІРµРґРёС‚Рµ РєРѕРѕСЂРґРёРЅР°С‚Сѓ Y: ";
 			cin >> cord.X;
-			cout << "Введите координату X: ";
+			cout << "Р’РІРµРґРёС‚Рµ РєРѕРѕСЂРґРёРЅР°С‚Сѓ X: ";
 			cin >> cord.Y;
 			cord.X -= 1; cord.Y -= 1;
 		}
@@ -199,7 +204,7 @@ void PlayerMove(Options& options, int player) {
 		}
 	} */
 }
-// Метод, при помощи которого человек будет ходить
+// РњРµС‚РѕРґ, РїСЂРё РїРѕРјРѕС‰Рё РєРѕС‚РѕСЂРѕРіРѕ С‡РµР»РѕРІРµРє Р±СѓРґРµС‚ С…РѕРґРёС‚СЊ
 void PlayerMove(Options& options, char symbol)
 {
 	if (symbol == 'X' || symbol == 'x') {
@@ -209,68 +214,68 @@ void PlayerMove(Options& options, char symbol)
 		PlayerMove(options, 2);
 	}
 }
-// Запускает игру на одного игрока
+// Р—Р°РїСѓСЃРєР°РµС‚ РёРіСЂСѓ РЅР° РѕРґРЅРѕРіРѕ РёРіСЂРѕРєР°
 void Single(Options& options) {
 	showMap(options);
 	do {
 		PlayerMove(options,'X');
-		// Проверка на победу X
+		// РџСЂРѕРІРµСЂРєР° РЅР° РїРѕР±РµРґСѓ X
 		if (VictoryCheck(options, 'X')) { break; }
 		BOTRandomXY(options);
-		// Проверка на победу O
+		// РџСЂРѕРІРµСЂРєР° РЅР° РїРѕР±РµРґСѓ O
 		if (VictoryCheck(options, 'O')) { break; }
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 });
 		showMap(options);
 		if (DrawCheck(options)) { break; }
 	} while (true);
 }
-// Запускает игру на двух человек
+// Р—Р°РїСѓСЃРєР°РµС‚ РёРіСЂСѓ РЅР° РґРІСѓС… С‡РµР»РѕРІРµРє
 void Duo(Options& options) {
 	bool isXO = true;
 	showMap(options);
 	do {
-		string move = isXO ? "Крестики" : "Нолики";
+		string move = isXO ? "РљСЂРµСЃС‚РёРєРё" : "РќРѕР»РёРєРё";
 		char check = isXO ? 'X' : 'O';
-		cout << "Ходят - " << move << "!" << endl;
+		cout << "РҐРѕРґСЏС‚ - " << move << "!" << endl;
 		PlayerMove(options, check);
-		// Проверка на победу X
+		// РџСЂРѕРІРµСЂРєР° РЅР° РїРѕР±РµРґСѓ X
 		if (VictoryCheck(options, check)) { break; }
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 });
 		showMap(options);
 		isXO = !isXO;
 		/*
-		cout << "Ходят - Нолики!" << endl;
+		cout << "РҐРѕРґСЏС‚ - РќРѕР»РёРєРё!" << endl;
 		PlayerMove(options, 'O');
-		// Проверка на победу O
+		// РџСЂРѕРІРµСЂРєР° РЅР° РїРѕР±РµРґСѓ O
 		if (VictoryCheck(options, 'O')) { break; }
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 });
 		showMap(options);*/
 		if (DrawCheck(options)) { break; }
 	} while (true);
 }
-// Показывает меню
+// РџРѕРєР°Р·С‹РІР°РµС‚ РјРµРЅСЋ
 void showMenu(Options& options) {
 	while (true) {
-		cout << "[!]КРЕСТИКИ-НОЛИКИ[!]\n";
+		cout << "[!]РљР Р•РЎРўРРљР-РќРћР›РРљР[!]\n";
 		char checker = options.menuSelect == 0 ? '/' : ' ';
-		cout << "[" << checker << "] Один игрок" << endl;
+		cout << "[" << checker << "] РћРґРёРЅ РёРіСЂРѕРє" << endl;
 		checker = options.menuSelect == 1 ? '/' : ' ';
-		cout << "[" << checker << "] Два игрока" << endl;
+		cout << "[" << checker << "] Р”РІР° РёРіСЂРѕРєР°" << endl;
 		checker = options.menuSelect == 2 ? '/' : ' ';
-		cout << "[" << checker << "] Выход" << endl;
+		cout << "[" << checker << "] Р’С‹С…РѕРґ" << endl;
 		switch (_getch()) {
 		case 'w':
 		case 'W':
-		case 'ц':
-		case 'Ц':
+		case 'С†':
+		case 'Р¦':
 		case 72:
 			if (options.menuSelect - 1 >= 0)
 				options.menuSelect--;
 			break;
 		case 's':
 		case 'S':
-		case 'ы':
-		case 'Ы':
+		case 'С‹':
+		case 'Р«':
 		case 80:
 			if (options.menuSelect + 1 <= 2)
 				options.menuSelect++;
@@ -306,7 +311,7 @@ int main()
 	Options options;
 
 	for (;;) {
-		//SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 }); // Ломает абсолютно всё, а переделывать леть
+		//SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 }); // Р›РѕРјР°РµС‚ Р°Р±СЃРѕР»СЋС‚РЅРѕ РІСЃС‘, Р° РїРµСЂРµРґРµР»С‹РІР°С‚СЊ Р»РµС‚СЊ
 		showMenu(options);
 	}
 }
