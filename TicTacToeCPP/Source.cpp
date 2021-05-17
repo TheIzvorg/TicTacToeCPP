@@ -8,21 +8,23 @@
 using namespace std;
 
 struct Coordinates {
+	// Ось X
 	int X = 0;
+	// Ось Y
 	int Y = 0;
 };
 
 struct Options {
-	//массив с челиком —--------------------—
+	// Массив - поле игры
 	int map[3][3] = { {0,0,0,},
 					  {0,0,0,},
 					  {0,0,0,},
 	};
 
-	// int menu[3] = { 1,0,0 };
+	// Выбор в меню
 	int menuSelect = 0;
 };
-
+// Выводит сообщение о победе одной из сторон
 void Victory(Options& options, string winner) {
 	Sleep(1500);
 	system("cls");
@@ -34,7 +36,7 @@ void Victory(Options& options, string winner) {
 		}
 	}
 }
-
+// Выводит сообщение о ничье
 void Draw(Options& options) {
 	Sleep(1500);
 	system("cls");
@@ -47,7 +49,7 @@ void Draw(Options& options) {
 	}
 	system("CLS");
 }
-
+// Проверяет, заполненны ли все поля, если да, то - Ничья
 bool DrawCheck(Options& options) {
 	// проверка на ничью 
 	int drawCounter = 0;
@@ -67,63 +69,36 @@ bool DrawCheck(Options& options) {
 	}
 	return false;
 }
-
+// Проверяет одну из сторон на победу.
 bool VictoryCheck(Options& options, bool Check) {
 	// проверка победы крестов "Х"
-	if (Check) {
-		for (int i = 0; i < 3; i++) {
-			int Ycheck = 0, Xcheck = 0, XYcheck = 0, YXcheck = 0;
-			for (int j = 0; j < 3; j++) {
-				if (options.map[i][j] == 1) {
-					Ycheck++;
-				}
-				if (options.map[j][i] == 1) {
-					Xcheck++;
-				}
-				if (options.map[j][j] == 1) {
-					XYcheck++;
-				}
-				if (options.map[j][2 - j] == 1) {
-					YXcheck++;
-				}
+	string field = Check ? "Крестики" : "Нолики";
+	for (int i = 0; i < 3; i++) {
+		int Ycheck = 0, Xcheck = 0, XYcheck = 0, YXcheck = 0;
+		for (int j = 0; j < 3; j++) {
+			if (options.map[i][j] == !Check + 1) {
+				Ycheck++;
 			}
-			if (Ycheck == 3 || Xcheck == 3 || XYcheck == 3 || YXcheck == 3)
-			{
-				Victory(options, "Крестики");
-				return true;
-				break;
+			if (options.map[j][i] == !Check + 1) {
+				Xcheck++;
+			}
+			if (options.map[j][j] == !Check + 1) {
+				XYcheck++;
+			}
+			if (options.map[j][2 - j] == !Check + 1) {
+				YXcheck++;
 			}
 		}
-	}
-	else{
-		// проверка победы нолей "О"
-		for (int i = 0; i < 3; i++) {
-			int Ycheck = 0, Xcheck = 0, XYcheck = 0, YXcheck = 0;
-			for (int j = 0; j < 3; j++) {
-				if (options.map[i][j] == 2) {
-					Ycheck++;
-				}
-				if (options.map[j][i] == 2) {
-					Xcheck++;
-				}
-				if (options.map[j][j] == 2) {
-					XYcheck++;
-				}
-				if (options.map[j][2 - j] == 2) {
-					YXcheck++;
-				}
-			}
-			if (Ycheck == 3 || Xcheck == 3 || XYcheck == 3 || YXcheck == 3)
-			{
-				Victory(options, "Нолики");
-				return true;
-				break;
-			}
+		if (Ycheck == 3 || Xcheck == 3 || XYcheck == 3 || YXcheck == 3)
+		{
+			Victory(options, field);
+			return true;
+			break;
 		}
 	}
 	return false;
 }
-
+// Проверяет одну из сторон на победу.
 bool VictoryCheck(Options& options, char symbol) {
 	if (symbol == 'X' || symbol == 'x') {
 		return VictoryCheck(options, true);
@@ -133,7 +108,7 @@ bool VictoryCheck(Options& options, char symbol) {
 	}
 	return false;
 }
-
+// Показывает поле для игры
 void showMap(Options options) {
 	system("cls");
 	cout << "  X 1   2   3  " << endl;
@@ -167,7 +142,7 @@ void showMap(Options options) {
 	}
 	Sleep(1000);
 }
-
+// Бот для одиночной сессии
 void BOTRandomXY(Options& options) {
 	Coordinates cord;
 
@@ -185,7 +160,7 @@ void BOTRandomXY(Options& options) {
 	options.map[cord.X][cord.Y] = 2;
 	cout << endl;
 }
-
+// Метод, при помощи которого человек будет ходить
 void PlayerMove(Options& options, int player) {
 
 	// Логарифм золотого сечения ln(n)
@@ -224,7 +199,7 @@ void PlayerMove(Options& options, int player) {
 		}
 	} */
 }
-
+// Метод, при помощи которого человек будет ходить
 void PlayerMove(Options& options, char symbol)
 {
 	if (symbol == 'X' || symbol == 'x') {
@@ -234,7 +209,7 @@ void PlayerMove(Options& options, char symbol)
 		PlayerMove(options, 2);
 	}
 }
-
+// Запускает игру на одного игрока
 void Single(Options& options) {
 	showMap(options);
 	do {
@@ -249,7 +224,7 @@ void Single(Options& options) {
 		if (DrawCheck(options)) { break; }
 	} while (true);
 }
-
+// Запускает игру на двух человек
 void Duo(Options& options) {
 	bool isXO = true;
 	showMap(options);
@@ -273,7 +248,7 @@ void Duo(Options& options) {
 		if (DrawCheck(options)) { break; }
 	} while (true);
 }
-
+// Показывает меню
 void showMenu(Options& options) {
 	while (true) {
 		cout << "[!]КРЕСТИКИ-НОЛИКИ[!]\n";
